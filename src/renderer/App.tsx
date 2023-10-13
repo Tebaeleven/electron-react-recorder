@@ -1,7 +1,6 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { useEffect, useState } from 'react';
-import { useImmer } from 'use-immer';
 
 function Hello() {
   const [imageData, setImageData] = useState('');
@@ -13,18 +12,30 @@ function Hello() {
     setImageData(thumbnails);
     console.log(thumbnails);
   }
+  async function setSource(id) {
+    await screenshot.setSource(id);
 
+  }
+  useEffect(() => {
+    getWindowData();
+  }, []);
   return (
-    <div>
+    <div style={{display:"flex"}}>
+      <div >
       {Object.entries(imageData).map(([key, value]) => (
         <div key={key}>
-          <img src={value.dataURL} alt="" style={{ width: '500px' }} />
+          <img
+            src={value.dataURL}
+            alt=""
+            style={{ width: '200px' }}
+            onClick={() => setSource(value.id)}
+          />
           <p>
             {value.name} | {value.id}
           </p>
         </div>
       ))}
-      <button id="startBtn" onClick={getWindowData} type="button">
+      <button id="startBtn" onClick={setSource} type="button">
         画面情報を取得
       </button>
       <button id="startBtn" type="button">
@@ -43,7 +54,12 @@ function Hello() {
         ))}
       </select>
       {selectedWindow}
+
+      </div>
+      <div>
       <video></video>
+      </div>
+
     </div>
   );
 }

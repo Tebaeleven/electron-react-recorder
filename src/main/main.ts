@@ -152,10 +152,12 @@ app
 // メインプロセス
 
 ipcMain.handle('get-window-thumbnail', async (event) => {
+  console.log("dfadad")
   try {
     const sources = await desktopCapturer.getSources({
       types: ['window', 'screen'],
       thumbnailSize: { width: 1920, height: 1080 },
+      
     });
 
     const dataURLs = sources.map(async (source) => {
@@ -177,21 +179,18 @@ ipcMain.handle('get-window-thumbnail', async (event) => {
 
     return Promise.all(dataURLs);
   } catch (error) {
-    // Handle any errors that occur during the capture process
     console.error('Error getting sources:', error);
     return 'Error getting sources';
   }
 });
 
-ipcMain.handle('get-window', async (event) => {
-  try {
-    const sources = await desktopCapturer.getSources({
-      types: ['window', 'screen'],
-    });
 
-    return sources;
+ipcMain.on('set-source', async (event,id) => {
+  try {
+    console.log(id)
+    console.log("id")
+    mainWindow.webContents.send('SET_SOURCE')
   } catch (error) {
-    // Handle any errors that occur during the capture process
     console.error('Error getting sources:', error);
     return 'Error getting sources';
   }
